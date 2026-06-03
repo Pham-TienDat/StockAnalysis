@@ -1,17 +1,12 @@
 # Sử dụng image Python cơ bản
-FROM python:latest
+FROM python:3.11-slim
 
-# COPY ./requirements.txt /
-# # Cài đặt các package cần thiết
-# RUN pip install -r requirements.txt
-
-RUN pip install requests
-RUN pip install pandas
-RUN pip install plotly==5.3.1
-RUN pip install retrying==1.3.3
-RUN pip install confluent-kafka
-RUN pip install vnstock
-RUN pip install beautifulsoup4
+RUN pip install --no-cache-dir \
+    requests \
+    pandas \
+    confluent-kafka \
+    vnstock \
+    beautifulsoup4
 
 # Copy file Python của bạn vào container
 COPY ./crawler.py /app/crawler.py
