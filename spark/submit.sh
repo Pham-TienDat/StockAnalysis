@@ -10,7 +10,7 @@ if [ ! -z "${SPARK_APPLICATION_JAR_LOCATION}" ]; then
     echo "Submit application ${SPARK_APPLICATION_JAR_LOCATION} with main class ${SPARK_APPLICATION_MAIN_CLASS} to Spark master ${SPARK_MASTER_URL}"
     echo "Passing arguments ${SPARK_APPLICATION_ARGS}"
     /${SPARK_HOME}/bin/spark-submit \
-        --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.elasticsearch:elasticsearch-spark-30_2.12:7.15.2  \
+        --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.elasticsearch:elasticsearch-spark-30_2.12:9.0.0  \
         --class ${SPARK_APPLICATION_MAIN_CLASS} \
         --master ${SPARK_MASTER_URL} \
         --conf "spark.driver.extraJavaOptions=-Dkafka.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer" \
@@ -22,7 +22,7 @@ else
         echo "Submit application ${SPARK_APPLICATION_PYTHON_LOCATION} to Spark master ${SPARK_MASTER_URL}"
         echo "Passing arguments ${SPARK_APPLICATION_ARGS}"
         PYSPARK_PYTHON=python3  /spark/bin/spark-submit \
-            --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.elasticsearch:elasticsearch-spark-30_2.12:7.15.2 \
+            --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.elasticsearch:elasticsearch-spark-30_2.12:9.0.0 \
             --master ${SPARK_MASTER_URL} \
             --conf "spark.driver.extraJavaOptions=-Dkafka.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer" \
             --conf "spark.executor.extraJavaOptions=-Dkafka.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer" \

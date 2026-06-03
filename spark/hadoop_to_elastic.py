@@ -1,11 +1,10 @@
 from pyspark.sql import SparkSession
 import os
 
-ES_NODES = os.environ.get("ES_NODES", "https://big-data.es.asia-southeast1.gcp.elastic-cloud.com")
-ES_PORT = os.environ.get("ES_PORT", "9243")
-ES_USER = os.environ.get("ES_USER", "elastic")
-ES_PASSWORD = os.environ.get("ES_PASSWORD", "")
-ES_INDEX = os.environ.get("ES_INDEX_VN30", "vn_30")
+ES_NODES = os.environ.get("ES_NODES", "")
+ES_PORT = os.environ.get("ES_PORT", "443")
+ES_API_KEY = os.environ.get("ES_API_KEY", "")
+ES_INDEX = os.environ.get("ES_INDEX_VN30_AGG", "vn_30_aggregated")
 
 
 def total_volume_per_ticker(dataframe):
@@ -29,8 +28,7 @@ if __name__ == "__main__":
             .option("es.nodes", ES_NODES) \
             .option("es.port", ES_PORT) \
             .option("es.resource", ES_INDEX) \
-            .option("es.net.http.auth.user", ES_USER) \
-            .option("es.net.http.auth.pass", ES_PASSWORD) \
+            .option("es.net.http.header.Authorization", f"ApiKey {ES_API_KEY}") \
             .option("es.nodes.wan.only", "true") \
             .mode("overwrite") \
             .save()

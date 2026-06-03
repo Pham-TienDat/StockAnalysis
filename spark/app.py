@@ -7,8 +7,9 @@ import os
 ES_ENABLED = os.environ.get("ES_ENABLED", "false").lower() == "true"
 ES_NODES = os.environ.get("ES_NODES", "https://big-data.es.asia-southeast1.gcp.elastic-cloud.com")
 ES_PORT = os.environ.get("ES_PORT", "9243")
-ES_USER = os.environ.get("ES_USER", "elastic")
-ES_PASSWORD = os.environ.get("ES_PASSWORD", "")
+# ES_USER = os.environ.get("ES_USER", "elastic")
+# ES_PASSWORD = os.environ.get("ES_PASSWORD", "")
+ES_API_KEY = os.environ.get("ES_API_KEY", "")
 ES_INDEX_VN30 = os.environ.get("ES_INDEX_VN30", "vn_30")
 ES_INDEX_REALTIME = os.environ.get("ES_INDEX_REALTIME", "stock_realtime")
 
@@ -32,7 +33,7 @@ COMPANY_INFO = [
     ("FPT", "FPT Corporation", "Technology"),
     ("GAS", "PV GAS", "Energy"),
     ("GVR", "Vietnam Rubber Group", "Agriculture"),
-    ("DHB", "Duc Giang Chemicals", "Chemicals"),
+    ("DGC", "Duc Giang Chemicals", "Chemicals"),
     ("HPG", "Hoa Phat Group", "Materials"),
     ("MBB", "MBBank", "Banking"),
     ("MSN", "Masan Group", "Consumer"),
@@ -80,8 +81,7 @@ def write_to_es(df, es_index):
         .option("es.nodes", ES_NODES) \
         .option("es.port", ES_PORT) \
         .option("es.resource", es_index) \
-        .option("es.net.http.auth.user", ES_USER) \
-        .option("es.net.http.auth.pass", ES_PASSWORD) \
+        .option("es.net.http.header.Authorization", f"ApiKey {ES_API_KEY}") \
         .option("es.nodes.wan.only", "true") \
         .option("es.mapping.id", "doc_id") \
         .mode("append") \

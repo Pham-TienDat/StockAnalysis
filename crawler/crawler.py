@@ -42,14 +42,14 @@ def get_stock_data(symbol):
     return df.to_json(date_format='iso', orient='records')
 
 def get_stock_data_intraday(symbol):
-    q = Quote(symbol=symbol, source='VCI')
+    q = Quote(symbol=symbol, source='kbs')
     df = q.intraday(page_size=100)
     df['ticker'] = symbol
     df['time'] = pd.to_datetime(df['time'])
     return df.to_json(date_format='iso', orient='records')
 
 def jobCrawlVn30Data(kafka_topic, bootstrap_servers):
-    stock_array = ["ACB","BCM","BID","BVH","CTG","FPT","GAS","GVR","DHB","HPG","MBB","MSN",
+    stock_array = ["ACB","BCM","BID","BVH","CTG","FPT","GAS","GVR","DGC","HPG","MBB","MSN",
                "MWG","PLX","POW","SAB","SHB","SSB","TCB","TPB","VCB","VHM","VIB","VIC","VJC","VNM","VPB","VRE","SSI","HDB"]
     while True:
         for symbol in stock_array:
