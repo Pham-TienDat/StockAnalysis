@@ -1,0 +1,7 @@
+data/
+example/SparkWriteApplication.jar
+.env
+docs/
+*test*.py
+CLAUDE.md
+*.txt
