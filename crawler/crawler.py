@@ -27,16 +27,24 @@ def delivery_report(err, msg):
     else:
         print('Tin nhắn được gửi thành công: {}'.format(msg.key().decode('utf-8')))
 
-def get_stock_data(symbol):
+def _resolve_date_range():
+    """Trả về (start_str, end_str) từ env vars hoặc mặc định là tuần hiện tại."""
+    start = os.environ.get('CRAWL_START_DATE', '').strip()
+    end   = os.environ.get('CRAWL_END_DATE', '').strip()
+    if start and end:
+        return start, end
     today = datetime.now()
-    start_date_this_week = today - timedelta(days=today.weekday())
-    start_date_last_week = start_date_this_week - timedelta(days=7)
-    end_date_last_week = start_date_last_week + timedelta(days=6)
-    start_str = start_date_last_week.strftime('%Y-%m-%d')
-    end_str = end_date_last_week.strftime('%Y-%m-%d')
+    start = (today - timedelta(days=today.weekday())).strftime('%Y-%m-%d')  # thứ 2 tuần này
+    end   = today.strftime('%Y-%m-%d')
+    return start, end
 
+def get_stock_data(symbol):
+    start_str, end_str = _resolve_date_range()
+    interval = os.environ.get('CRAWL_INTERVAL', '1H').strip()
+
+    print(f'[vn30] {symbol}: {start_str} → {end_str} ({interval})')
     q = Quote(symbol=symbol, source='VCI')
-    df = q.history(start=start_str, end=end_str, interval='1H')
+    df = q.history(start=start_str, end=end_str, interval=interval)
     df['ticker'] = symbol
     df['time'] = pd.to_datetime(df['time'])
     return df.to_json(date_format='iso', orient='records')
